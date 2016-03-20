@@ -28,6 +28,7 @@
     "has-binary": "0.1.7",
     "express": "latest",
     "debug": "2.2.0",
+    "fs": "latest",
     "python-shell": "0.4.0"
   },
   "devDependencies": {

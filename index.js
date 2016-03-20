@@ -5,6 +5,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 var PythonShell = require('python-shell');
+var fs = require('fs');
 var chatType = '';
 
 server.listen(port, function () {
@@ -16,7 +17,7 @@ app.use('/chat', express.static(__dirname + '/public'));
 
 
 // Routing
-app.get('/', function(req,res) {
+app.get('/', function(req, res) {
   res.send('Hi');
  });
 
@@ -28,7 +29,6 @@ app.get('/chat/:type', function(req,res) {
 app.get('/merchant', function(req,res) {
   res.sendFile(__dirname + '/public/merchant.html');
 });
-
 
 // Chatroom
 var numUsers = 0;
@@ -49,12 +49,19 @@ io.on('connection', function (socket) {
             message: results[0]
           });
         }); 
-        
+
     } else if(chatType = 'human'){
         console.log('human');
         socket.broadcast.emit('new message', {
         username: 'bot',
         message: data
+      });
+
+      fs.appendFile("logs/messages", data+',', function(err) {
+          if(err) {
+              return console.log(err);
+          }
+          console.log("The file was saved!");
       });
     }
   }
