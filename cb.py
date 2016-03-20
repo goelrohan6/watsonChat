@@ -16,7 +16,6 @@ chatbot.train("chatterbot.corpus.english")
 
 # Train based on the conversation of people
 chatbot.train(messages)
-print messages
 
 arr = (sys.argv)
 reply = chatbot.get_response(arr[1])
