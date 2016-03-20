@@ -5,42 +5,66 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 var PythonShell = require('python-shell');
+var chatType = '';
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
 
-// Routing
 app.use(express.static(__dirname + '/public'));
+app.use('/chat', express.static(__dirname + '/public'));
+
+
+// Routing
+app.get('/', function(req,res) {
+  res.send('Hi');
+ });
+
+app.get('/chat/:type', function(req,res) {
+  chatType = req.params.type;
+  res.sendFile(__dirname + '/public/index.html');
+ });
+
+app.get('/merchant', function(req,res) {
+  res.sendFile(__dirname + '/public/merchant.html');
+});
 
 
 // Chatroom
-var messages = [];
-
 var numUsers = 0;
+var chatType = '';
 
 io.on('connection', function (socket) {
+    var chatTypeF = function(data){
+      if(chatType == 'ai'){
+
+        text = {
+          args:[data]
+        };
+
+        PythonShell.run('cb.py', text, function (err, results) {
+          if (err) throw err;
+          socket.emit('new message', {
+            username: 'bot',
+            message: results[0]
+          });
+        }); 
+        
+    } else if(chatType = 'human'){
+        console.log('human');
+        socket.broadcast.emit('new message', {
+        username: 'bot',
+        message: data
+      });
+    }
+  }
+
   var addedUser = false;
 
   // when the client emits 'new message', this listens and executes  
-  socket.on('new message', function (data) {
-    messages.push(data);
-    console.log(messages);
-
-    text = {
-      args:[data]
-    };
-
-    PythonShell.run('cb.py', text, function (err, results) {
-      if (err) throw err;
-      console.log(results[0]);
-      socket.emit('new message', {
-        username: 'bot',
-        message: results[0]
-      });
-      console.log(results[0]);
-    }); 
-});  
+    socket.on('new message', function(data){
+      chatTypeF(data);
+    });
   
   // when the client emits 'add user', this listens and executes
   socket.on('add user', function (username) {
