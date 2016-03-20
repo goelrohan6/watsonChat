@@ -1,6 +1,8 @@
 ## Synopsis
 
-CareAI is a cognitive chat system which learns from customer care chats, and eventually becomes smart enough to replace humans chatting with customers. It is based on IBM Watson Dialog Service and Chatterbot. With CareAI, you add text-based NLP to your website and get registerations, booking, appoinments, reviews and of course, customer care through Chat AI.
+CareAI is a cognitive chat system which learns from customer care chats, and eventually becomes smart enough to replace humans chatting with customers. It is based on IBM Watson Dialog Service and Chatterbot[https://github.com/gunthercox/ChatterBot]. With CareAI, you add text-based NLP to your website and get registerations, booking, appoinments, reviews and of course, customer care through Chat AI.
+
+Bluemix link[http://customer-care.mybluemix.net/] (Python dependencies not working on Bluemix hence will be unable to use AI Bot.)
 
 ## Motivation
 
