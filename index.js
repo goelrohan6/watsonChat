@@ -4,6 +4,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
+var PythonShell = require('python-shell');
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
@@ -12,22 +13,35 @@ server.listen(port, function () {
 // Routing
 app.use(express.static(__dirname + '/public'));
 
+
 // Chatroom
+var messages = [];
 
 var numUsers = 0;
 
 io.on('connection', function (socket) {
   var addedUser = false;
 
-  // when the client emits 'new message', this listens and executes
+  // when the client emits 'new message', this listens and executes  
   socket.on('new message', function (data) {
-    // we tell the client to execute 'new message'
-    socket.broadcast.emit('new message', {
-      username: socket.username,
-      message: data
-    });
-  });
+    messages.push(data);
+    console.log(messages);
 
+    text = {
+      args:[data]
+    };
+
+    PythonShell.run('cb.py', text, function (err, results) {
+      if (err) throw err;
+      console.log(results[0]);
+      socket.emit('new message', {
+        username: 'bot',
+        message: results[0]
+      });
+      console.log(results[0]);
+    }); 
+});  
+  
   // when the client emits 'add user', this listens and executes
   socket.on('add user', function (username) {
     if (addedUser) return;

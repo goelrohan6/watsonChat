@@ -27,7 +27,8 @@
     "socket.io-adapter": "0.4.0",
     "has-binary": "0.1.7",
     "express": "latest",
-    "debug": "2.2.0"
+    "debug": "2.2.0",
+    "python-shell": "0.4.0"
   },
   "devDependencies": {
     "babel-preset-es2015": "6.3.13",
