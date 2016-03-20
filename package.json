@@ -2,6 +2,7 @@
   "name": "socket.io",
   "version": "1.4.5",
   "description": "node.js realtime framework server",
+  "start": "nodejs app.js",
   "keywords": [
     "realtime",
     "framework",
